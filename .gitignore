@@ -1,0 +1,11 @@
+.DS_Store
+node_modules
+/dist
+
+/tests/e2e/videos/
+/tests/e2e/screenshots/
+/tests/coverage/
+
+.idea
+.vscode
+package-lock.json

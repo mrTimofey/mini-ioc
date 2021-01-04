@@ -1,0 +1,11 @@
+src
+__tests__
+
+node_modules
+
+.editorconfig
+.eslintrc.js
+.gitignore
+jest.config.ts
+package-lock.json
+tsconfig.json
