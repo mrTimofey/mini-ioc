@@ -1,5 +1,6 @@
 src
 __tests__
+.github
 
 node_modules
 
