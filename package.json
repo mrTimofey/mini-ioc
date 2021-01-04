@@ -1,12 +1,17 @@
 {
   "name": "mini-ioc",
-  "version": "0.1.0-1",
+  "version": "0.1.0-2",
   "description": "Minimalistic IoC/DI container for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "author": "Timofey Tiunov <timoxa17@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/mrTimofey/mini-ioc",
+  "repository": "https://github.com/mrTimofey/mini-ioc.git",
   "scripts": {
     "test": "jest",
-    "build": "rm -rf dist && tsc"
+    "build": "tsc",
+    "prepublishOnly": "npm test && npm run build"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
