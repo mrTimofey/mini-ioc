@@ -1,10 +1,11 @@
-import Vue from 'vue';
+import type Vue from 'vue';
 import type { InjectKey } from 'vue/types/options';
 import { createDecorator } from 'vue-class-component';
 import { APP_IOC_CONTAINER_PROVIDE_KEY, computedInjection } from './vue';
 
-function inject(target: Object, propKey: string | symbol, newInstance: boolean) {
-	if (!(target instanceof Vue) || typeof propKey === 'symbol') return true;
+function inject(target: Object, propKey: string | symbol, newInstance: boolean): void {
+	if (typeof propKey === 'symbol')
+		throw new TypeError('Vue class property key must be a string');
 	createDecorator(options => {
 		if (!options.inject) options.inject = {};
 		else if (Array.isArray(options.inject)) {

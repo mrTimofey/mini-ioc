@@ -1,4 +1,4 @@
-import type { ComputedOptions } from 'vue';
+import type { ComputedOptions } from 'vue/types/options';
 import Container, { ICtor } from '.';
 
 export const APP_IOC_CONTAINER_PROVIDE_KEY = 'VueAppDIContainer';
