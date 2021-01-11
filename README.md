@@ -65,7 +65,7 @@ const container = new Container();
 // Bind abstract class implementation
 container.bind(BaseClass, SubClass);
 
-console.log(container.get(SomeClass) instanceof Subclass); // true
+console.log(container.get(BaseClass) instanceof SubClass); // true
 ```
 
 You can completely override default behavior for a class instance creation.
@@ -89,9 +89,9 @@ class SubClass extends BaseClass {
 const container = new Container();
 
 // Register custom function as a resolver for BaseClass
-container.registerResolver(BaseClass, (classCtor, container) => SubClass.makeInstance());
+container.registerResolver(BaseClass, (classCtor, container) => classCtor.makeInstance());
 
-console.log(container.get(SomeClass) instanceof Subclass); // true
+console.log(container.get(BaseClass) instanceof SubClass); // true
 ```
 
 And that's all.
