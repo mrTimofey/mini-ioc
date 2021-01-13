@@ -8,8 +8,6 @@ export interface Resolver<T = unknown> {
 	(ctor: ICtor<T>, container: Container): T;
 }
 
-const INJECTABLE_METADATA_KEY = '__mini_ioc_injectable__';
-
 export default class Container {
 	private instanceMap = new WeakMap<ICtor, unknown>();
 	private resolvers = new WeakMap<ICtor, Resolver>();
@@ -21,8 +19,6 @@ export default class Container {
 	create<T>(ctor: ICtor<T>): T {
 		if (this.resolvers.has(ctor))
 			return this.resolvers.get(ctor)!(ctor, this) as T;
-		if (!Reflect.hasMetadata(INJECTABLE_METADATA_KEY, ctor))
-			throw new Error(`${ctor.name}: class doesn't have Resolvable decorator so it cannot be instantiated automatically by IOC container. You can either add Resolvable decorator or register custom resolver.`);
 		const ctorArgs: ICtor<unknown>[] | undefined = Reflect.getMetadata('design:paramtypes', ctor);
 		if (!ctorArgs?.length)
 			return new ctor();
@@ -73,6 +69,6 @@ export default class Container {
  * - marks class as injectable
  * @param ctor injectable entity class/constructor
  */
-export const Resolvable: ClassDecorator = ctor => {
-	Reflect.defineMetadata(INJECTABLE_METADATA_KEY, true, ctor);
+export const Resolvable: ClassDecorator = () => {
+	// nothing
 };
