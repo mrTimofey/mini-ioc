@@ -22,7 +22,7 @@ export default class Container {
 		if (this.resolvers.has(ctor))
 			return this.resolvers.get(ctor)!(ctor, this) as T;
 		if (!Reflect.hasMetadata(INJECTABLE_METADATA_KEY, ctor))
-			throw new Error(`${ctor.name}: class doesn't have Injectable decorator so it cannot be made automatically by DI. You can either add Injectable decorator or register custom resolver.`);
+			throw new Error(`${ctor.name}: class doesn't have Resolvable decorator so it cannot be instantiated automatically by IOC container. You can either add Resolvable decorator or register custom resolver.`);
 		const ctorArgs: ICtor<unknown>[] | undefined = Reflect.getMetadata('design:paramtypes', ctor);
 		if (!ctorArgs?.length)
 			return new ctor();
