@@ -8,7 +8,7 @@ export interface Resolver<T = unknown> {
 	(ctor: ICtor<T>, container: Container): T;
 }
 
-const INJECTABLE_METADATA_KEY = Symbol('Injectable');
+const INJECTABLE_METADATA_KEY = '__mini_ioc_injectable__';
 
 export default class Container {
 	private instanceMap = new WeakMap<ICtor, unknown>();
