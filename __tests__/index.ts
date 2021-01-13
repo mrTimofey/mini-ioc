@@ -16,17 +16,9 @@ class BindBaseClass {}
 @Resolvable class BindSubClass extends BindBaseClass {}
 
 describe('IOC container', () => {
-	it('#get: throws an error if target class is not decorated with Resolvable', () => {
-		expect(() => new Container().get(UnresolvableClass)).toThrowError();
-	});
-
 	it('#get: resolves same instance for a single class', () => {
 		const c = new Container();
 		expect(c.get(SomeClass)).toStrictEqual(c.get(SomeClass));
-	});
-
-	it('#create: throws an error if target class is not decorated with Resolvable', () => {
-		expect(() => new Container().create(UnresolvableClass)).toThrowError();
 	});
 
 	it('#create: makes new instances for a single class', () => {
