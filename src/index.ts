@@ -9,8 +9,8 @@ export interface Resolver<T = unknown> {
 }
 
 export default class Container {
-	private instanceMap = new WeakMap<ICtor, unknown>();
-	private resolvers = new WeakMap<ICtor, Resolver>();
+	private instanceMap = new Map<ICtor, unknown>();
+	private resolvers = new Map<ICtor, Resolver>();
 
 	/**
 	 * Make new instance of the provided class.

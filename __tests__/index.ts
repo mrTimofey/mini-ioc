@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import Container, { Resolvable } from '../src/index';
 
-class UnresolvableClass {}
 @Resolvable class SomeClass {}
 @Resolvable class SomeSubclass extends SomeClass {}
 @Resolvable class SomeOtherClass {}
