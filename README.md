@@ -47,7 +47,7 @@ const single = container.get(SomeOtherClass);
 console.log(single === container.get(SomeOtherClass)); // true
 
 // Resolve a fresh class instance
-const newInstance = container.makeNew(SomeOtherClass);
+const newInstance = container.create(SomeOtherClass);
 console.log(single === newInstance); // false
 
 // Constructor arguments are resolved automatically as single instances with container.get
@@ -139,7 +139,7 @@ defineComponent({
 	computed: {
 		// resolve as a singleton (container.get)
 		someInstance: computedInjection(SomeClass),
-		// resolve as an everytime-new instance (container.makeNew)
+		// resolve as an everytime-new instance (container.create)
 		freshSomeInstance: computedInjection(SomeClass, true),
 	},
 });
@@ -156,7 +156,7 @@ defineComponent({
 	setup() {
 		const container = inject(injectKey);
 		const someInstance = container.get(SomeClass);
-		const freshSomeInstance = container.makeNew(SomeClass);
+		const freshSomeInstance = container.create(SomeClass);
 	},
 });
 ```
@@ -174,7 +174,7 @@ class MyComponent {
 	@Inject
 	someInstance!: SomeClass;
 
-	// resolve as an everytime-new instance (container.makeNew)
+	// resolve as an everytime-new instance (container.create)
 	@InjectNew
 	freshSomeInstance!: SomeClass;
 }
