@@ -149,7 +149,7 @@ defineComponent({
 
 ```typescript
 import { defineComponent, inject } from "vue";
-import { injectKey } from "mini-ioc/dist/vue-composition";
+import { injectKey } from "mini-ioc/dist/vue";
 import SomeClass from "./anywhere";
 
 defineComponent({
