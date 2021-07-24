@@ -1,6 +1,6 @@
 {
   "name": "mini-ioc",
-  "version": "0.2.0-beta.2",
+  "version": "0.2.0",
   "description": "Minimalistic IoC/DI container for TypeScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
