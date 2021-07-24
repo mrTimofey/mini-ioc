@@ -1,11 +1,14 @@
-import type { ComputedOptions } from 'vue/types/options';
+// @ts-nocheck
+import type { ComputedOptions, InjectionKey } from 'vue';
 import Container, { ICtor } from '.';
 
 export const APP_IOC_CONTAINER_PROVIDE_KEY = 'VueAppDIContainer';
 
-export function mapProvider() {
+export function mapProvider(configure?: (container: Container) => void) {
+	const container = new Container();
+	if (configure) configure(container);
 	return {
-		[APP_IOC_CONTAINER_PROVIDE_KEY]: new Container(),
+		[APP_IOC_CONTAINER_PROVIDE_KEY]: container,
 	};
 }
 
@@ -18,3 +21,5 @@ export function computedInjection<T>(ctor: ICtor<T>, newInstance: boolean = fals
 		},
 	};
 }
+
+export const injectKey: InjectionKey<Container> = APP_IOC_CONTAINER_PROVIDE_KEY;
