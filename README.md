@@ -132,15 +132,22 @@ Resolving will work for both Vue 2 and 3, but **typing** will be available only 
 
 ```typescript
 import { defineComponent } from "vue";
-import { computedInjection } from "mini-ioc/dist/vue";
+import { injectKey, computedInjection } from "mini-ioc/dist/vue";
 import SomeClass from "./anywhere";
 
 defineComponent({
+	inject: [injectKey],
 	computed: {
 		// resolve as a singleton (container.get)
 		someInstance: computedInjection(SomeClass),
 		// resolve as an everytime-new instance (container.create)
 		freshSomeInstance: computedInjection(SomeClass, true),
+	},
+	// alternatively, you can use injected container directly
+	created() {
+		const container = this[injectKey];
+		const someInstance = container.get(SomeClass);
+		const freshSomeInstance = container.create(SomeClass);
 	},
 });
 ```
