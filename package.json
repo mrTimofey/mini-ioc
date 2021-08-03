@@ -6,8 +6,7 @@
   "repository": "https://github.com/mrTimofey/mini-ioc.git",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
-    "prepublish": "jest"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/jest": "^26.0.20",
