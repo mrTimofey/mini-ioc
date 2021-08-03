@@ -1,8 +1,10 @@
 import 'reflect-metadata';
-import Vue from 'vue';
-import Container, { Resolvable } from '../src/index';
-import { mapProvider, computedInjection, APP_IOC_CONTAINER_PROVIDE_KEY } from '../src/vue';
+import type { VueConstructor } from 'vue';
+import Container, { Resolvable } from 'mini-ioc';
+import { provideContainer, injectContainer, computedResolver } from '.';
 import { createRenderer } from 'vue-server-renderer';
+
+const Vue: VueConstructor = require('vue');
 
 @Resolvable
 class IdGenerator {
@@ -26,17 +28,17 @@ class SomeClass {
 const renderer = createRenderer();
 const renderApp = async (compText: (comp: any) => string, configure?: (c: Container) => void) => {
 	const Component = Vue.extend({
-		inject: { [APP_IOC_CONTAINER_PROVIDE_KEY]: APP_IOC_CONTAINER_PROVIDE_KEY },
+		inject: injectContainer(),
 		computed: {
-			someClass: computedInjection(SomeClass),
-			someClassAsNew: computedInjection(SomeClass, true),
+			someClass: computedResolver(SomeClass),
+			someClassAsNew: computedResolver(SomeClass, true),
 		},
 		render(h) {
 			return h('div', compText(this));
 		},
 	});
 	const App = Vue.extend({
-		provide: mapProvider(configure),
+		provide: provideContainer(configure),
 		render: h => h('div', [Component, Component].map(c => h(c))),
 	});
 	const app = new App();

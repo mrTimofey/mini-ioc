@@ -1,0 +1,15 @@
+{
+  "name": "mini-ioc",
+  "version": "0.2.0",
+  "description": "Minimalistic IoC/DI container for TypeScript",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "author": "Timofey Tiunov <timoxa17@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/mrTimofey/mini-ioc",
+  "repository": "https://github.com/mrTimofey/mini-ioc.git",
+  "scripts": {
+    "build": "tsc index.ts",
+    "prepublishOnly": "npm run build"
+  }
+}

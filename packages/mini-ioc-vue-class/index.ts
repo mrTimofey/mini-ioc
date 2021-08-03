@@ -1,7 +1,7 @@
 import type Vue from 'vue';
 import type { InjectKey } from 'vue/types/options';
 import { createDecorator } from 'vue-class-component';
-import { APP_IOC_CONTAINER_PROVIDE_KEY, computedInjection } from './vue';
+import { computedResolver, injectContainer } from 'mini-ioc-vue';
 
 function inject(target: Object, propKey: string | symbol, newInstance: boolean): void {
 	if (typeof propKey === 'symbol')
@@ -16,8 +16,8 @@ function inject(target: Object, propKey: string | symbol, newInstance: boolean):
 			options.inject = vueInjectObject;
 		}
 		if (!options.computed) options.computed = {};
-		options.inject[APP_IOC_CONTAINER_PROVIDE_KEY] = APP_IOC_CONTAINER_PROVIDE_KEY;
-		options.computed[propKey] = computedInjection(Reflect.getMetadata('design:type', target, propKey), newInstance);
+		Object.assign(options.inject, injectContainer());
+		options.computed[propKey] = computedResolver(Reflect.getMetadata('design:type', target, propKey), newInstance);
 	})(target as Vue, propKey);
 }
 

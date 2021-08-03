@@ -1,0 +1,16 @@
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "target": "esnext",
+    "strict": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "lib": ["es2017", "dom"],
+    "baseUrl": ".",
+    "types": ["vite/client", "reflect-metadata"]
+  }
+}

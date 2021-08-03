@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import Container, { Resolvable } from '../src/index';
+import Container, { Resolvable } from '.';
 
 @Resolvable class SomeClass {}
 @Resolvable class SomeSubclass extends SomeClass {}

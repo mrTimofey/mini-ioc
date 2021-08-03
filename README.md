@@ -132,16 +132,16 @@ Resolving will work for both Vue 2 and 3, but **typing** will be available only 
 
 ```typescript
 import { defineComponent } from "vue";
-import { injectKey, computedInjection } from "mini-ioc/dist/vue";
+import { injectKey, computedResolver } from "mini-ioc/dist/vue";
 import SomeClass from "./anywhere";
 
 defineComponent({
 	inject: [injectKey],
 	computed: {
 		// resolve as a singleton (container.get)
-		someInstance: computedInjection(SomeClass),
+		someInstance: computedResolver(SomeClass),
 		// resolve as an everytime-new instance (container.create)
-		freshSomeInstance: computedInjection(SomeClass, true),
+		freshSomeInstance: computedResolver(SomeClass, true),
 	},
 	// alternatively, you can use injected container directly
 	created() {
@@ -170,7 +170,7 @@ defineComponent({
 
 ### Vue 2/3 + vue-class-component
 
-Decorators are using `computedInjection` under-the-hood so the result is the same as using options API. But with decorators you get typing support for both Vue 2 and 3.
+Decorators are using `computedResolver` under-the-hood so the result is the same as using options API. But with decorators you get typing support for both Vue 2 and 3.
 
 ```typescript
 import { Inject, InjectNew } from "mini-ioc/dist/vue-class";

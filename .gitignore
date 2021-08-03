@@ -1,6 +1,6 @@
 .DS_Store
 node_modules
-/dist
+dist
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/
@@ -8,3 +8,6 @@ node_modules
 
 .idea
 .vscode
+
+packages/**/*.d.ts
+packages/**/*.js

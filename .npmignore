@@ -1,6 +1,7 @@
-src
-__tests__
 .github
+__tests__
+src
+examples
 
 node_modules
 
@@ -10,3 +11,6 @@ node_modules
 jest.config.ts
 package-lock.json
 tsconfig.json
+
+packages/**/*.ts
+!packages/**/.d.ts

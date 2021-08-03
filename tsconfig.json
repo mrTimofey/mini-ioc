@@ -5,19 +5,10 @@
     "strict": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "sourceMap": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
-    "types": [
-      "reflect-metadata"
-    ],
-    "lib": [
-      "es2015",
-      "dom"
-    ],
-    "declaration": true,
-    "outDir": "./dist"
-  },
-  "include": [
-    "src/**/*.ts"
-  ]
+    "types": ["reflect-metadata", "jest"],
+    "lib": ["es2015", "dom"],
+    "declaration": true
+  }
 }
