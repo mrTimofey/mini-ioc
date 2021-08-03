@@ -6,14 +6,18 @@
   "types": "index.d.ts",
   "author": "Timofey Tiunov <timoxa17@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/mrTimofey/mini-ioc",
+  "homepage": "https://github.com/mrTimofey/mini-ioc/packages/mini-ioc-vue-class",
   "repository": "https://github.com/mrTimofey/mini-ioc.git",
   "scripts": {
-    "build": "tsc index.ts",
+    "build": "tsc",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "mini-ioc": "*",
     "mini-ioc-vue": "*"
-  }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ]
 }

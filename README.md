@@ -12,7 +12,7 @@ Integrates smoothly to Vue.js 2/3 projects with [vue-class-component](https://gi
 
 ## How to use
 
-```
+```bash
 npm i mini-ioc
 ```
 
@@ -101,14 +101,18 @@ And that's all.
 
 ## Vue.js support
 
-To make things work in Vue.js components you should register mini-ioc container using `provide` and `mapProvider`:
+```bash
+npm i mini-ioc mini-ioc-vue
+```
+
+To make things work in Vue.js components you should register mini-ioc container in app root `provide`:
 
 ```typescript
-import { mapProvider } from "mini-ioc/dist/vue";
+import { provideContainer } from "mini-ioc-vue";
 
 const rootOptions = {
 	provide: {
-		...mapProvider((container) => {
+		...provideContainer((container) => {
 			// do with the container whatever you need to initialize your dependencies
 		}),
 		// ...mapProvider() // if you don't need configuration
@@ -132,22 +136,18 @@ Resolving will work for both Vue 2 and 3, but **typing** will be available only 
 
 ```typescript
 import { defineComponent } from "vue";
-import { injectKey, computedResolver } from "mini-ioc/dist/vue";
+import { injectContainer, computedResolver } from "mini-ioc-vue";
 import SomeClass from "./anywhere";
 
 defineComponent({
-	inject: [injectKey],
+	inject: {
+		...injectContainer(),
+	},
 	computed: {
 		// resolve as a singleton (container.get)
 		someInstance: computedResolver(SomeClass),
 		// resolve as an everytime-new instance (container.create)
 		freshSomeInstance: computedResolver(SomeClass, true),
-	},
-	// alternatively, you can use injected container directly
-	created() {
-		const container = this[injectKey];
-		const someInstance = container.get(SomeClass);
-		const freshSomeInstance = container.create(SomeClass);
 	},
 });
 ```
@@ -156,7 +156,7 @@ defineComponent({
 
 ```typescript
 import { defineComponent, inject } from "vue";
-import { injectKey } from "mini-ioc/dist/vue";
+import { injectKey } from "mini-ioc-vue";
 import SomeClass from "./anywhere";
 
 defineComponent({
@@ -170,10 +170,14 @@ defineComponent({
 
 ### Vue 2/3 + vue-class-component
 
+```bash
+npm i mini-ioc mini-ioc-vue mini-ioc-vue-class
+```
+
 Decorators are using `computedResolver` under-the-hood so the result is the same as using options API. But with decorators you get typing support for both Vue 2 and 3.
 
 ```typescript
-import { Inject, InjectNew } from "mini-ioc/dist/vue-class";
+import { Inject, InjectNew } from "mini-ioc-vue-class";
 import SomeClass from "./anywhere";
 
 class MyComponent {

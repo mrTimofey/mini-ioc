@@ -9,11 +9,15 @@
   "homepage": "https://github.com/mrTimofey/mini-ioc",
   "repository": "https://github.com/mrTimofey/mini-ioc.git",
   "scripts": {
-    "build": "tsc index.ts",
+    "build": "tsc",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "mini-ioc": "*",
     "vue": "^2.6.14"
-  }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ]
 }
