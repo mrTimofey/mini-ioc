@@ -4,6 +4,7 @@ import Container, { Resolvable } from 'mini-ioc';
 import { provideContainer, injectContainer, computedResolver } from '.';
 import { createRenderer } from 'vue-server-renderer';
 
+// @ts-ignore
 const Vue: VueConstructor = require('vue');
 
 @Resolvable
