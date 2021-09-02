@@ -14,7 +14,6 @@
     "@typescript-eslint/parser": "^4.13.0",
     "eslint": "^7.32.0",
     "jest": "^27.0.6",
-    "lerna": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "ts-jest": "^27.0.4",
     "ts-node": "^10.1.0",
