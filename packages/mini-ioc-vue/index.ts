@@ -1,4 +1,4 @@
-import Container, { ICtor } from 'mini-ioc';
+import Container, { AnyClass } from 'mini-ioc';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface IInjectionKey<T> extends Symbol {}
@@ -18,7 +18,7 @@ export function injectContainer() {
 	};
 }
 
-export function computedResolver<T>(ctor: ICtor<T>, newInstance: boolean = false): () => T {
+export function computedResolver<T>(ctor: AnyClass<T>, newInstance: boolean = false): () => T {
 	return function(this: any) {
 		// eslint-disable-next-line no-invalid-this
 		const container = this[APP_IOC_CONTAINER_INJECT_KEY] as Container;

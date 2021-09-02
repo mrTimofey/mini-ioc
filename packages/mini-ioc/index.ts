@@ -1,25 +1,21 @@
-export interface ICtor<T = unknown> {
-	new(...args: any[]): T;
-}
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export interface Resolver<T = unknown> {
-	// eslint-disable-next-line no-use-before-define
-	(ctor: ICtor<T>, container: Container): T;
-}
+export type RealClass<T = unknown> = new(...args: any[]) => T;
+export type AbstractClass<T = unknown> = abstract new(...args: any[]) => T;
+export type AnyClass<T = unknown> = RealClass<T> | AbstractClass<T>;
+// eslint-disable-next-line no-use-before-define
+export type Resolver<T = unknown> = (ctor: AnyClass<T>, container: Container) => T;
 
 export default class Container {
-	private instanceMap = new Map<ICtor, unknown>();
-	private resolvers = new Map<ICtor, Resolver>();
+	private instanceMap = new Map<AnyClass, unknown>();
+	private resolvers = new Map<AnyClass, Resolver>();
 
 	/**
 	 * Make new instance of the provided class.
 	 * @param ctor class to make instance from
 	 */
-	create<T>(ctor: ICtor<T>): T {
+	create<T>(ctor: AnyClass<T>): T {
 		if (this.resolvers.has(ctor))
-			return this.resolvers.get(ctor)!(ctor, this) as T;
-		const ctorArgs: ICtor<unknown>[] | undefined = Reflect.getMetadata('design:paramtypes', ctor);
+			return this.resolvers.get(ctor)!(ctor, this) as unknown as T;
+		const ctorArgs: ConstructorParameters<AnyClass<T>> | undefined = Reflect.getMetadata('design:paramtypes', ctor);
 		if (!ctorArgs?.length)
 			return new ctor();
 		const instance = new ctor(
@@ -33,7 +29,7 @@ export default class Container {
 	 * @param ctor class to make instance from
 	 * @param options inject options
 	 */
-	get<T>(ctor: ICtor<T>): T {
+	get<T>(ctor: AnyClass<T>): T {
 		if (this.instanceMap.has(ctor))
 			return this.instanceMap.get(ctor) as T;
 
@@ -47,7 +43,7 @@ export default class Container {
 	 * @param ctor constructor or class to make instance from
 	 * @param resolver factory returning resolved instance
 	 */
-	registerResolver<T, X extends T>(ctor: ICtor<T>, resolver: Resolver<X>): this {
+	registerResolver<T, X extends T>(ctor: AnyClass<T>, resolver: Resolver<X>): this {
 		this.resolvers.set(ctor, resolver as Resolver);
 		return this;
 	}
@@ -57,7 +53,7 @@ export default class Container {
 	 * @param abstract source class
 	 * @param target target class
 	 */
-	bind<T, X extends T>(abstract: ICtor<T>, target: ICtor<X>): this {
+	bind<T, X extends T>(abstract: AnyClass<T>, target: RealClass<X>): this {
 		return this.registerResolver(abstract, () => this.create(target));
 	}
 }
