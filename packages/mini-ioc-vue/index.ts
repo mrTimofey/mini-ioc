@@ -6,12 +6,7 @@ interface IInjectionKey<T> extends Symbol {}
 const APP_IOC_CONTAINER_INJECT_KEY = '__VueAppDIContainer__';
 export const injectKey: IInjectionKey<Container> = Symbol(APP_IOC_CONTAINER_INJECT_KEY);
 
-export function provideContainer(
-	configure?: (container: Container) => void,
-	createContainer: () => Container = () => new Container()
-) {
-	const container = createContainer();
-	if (configure) configure(container);
+export function provideContainer(container = new Container()) {
 	return {
 		[injectKey as symbol]: container,
 	};
