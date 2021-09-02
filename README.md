@@ -108,15 +108,17 @@ npm i mini-ioc mini-ioc-vue
 To make things work in Vue.js components you should register mini-ioc container in app root `provide`:
 
 ```typescript
+import Container from "mini-ioc";
 import { provideContainer } from "mini-ioc-vue";
+
+const container = new Container();
+
+// configure container bindings here
 
 const rootOptions = {
 	provide: {
-		// provideContainer will create a fresh container,
-		// if you need a custom container, pass your container to a provideContainer call
-		// like so provideContainer(container)
-		...provideContainer(),
-		// ...mapProvider() // if you don't need configuration
+		...provideContainer(container),
+		// ...provideContainer() // with default empty container
 	},
 };
 

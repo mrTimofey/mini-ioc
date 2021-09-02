@@ -1,6 +1,6 @@
 {
   "name": "mini-ioc-vue",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Vue.js mini-ioc binding internal package",
   "main": "index.js",
   "types": "index.d.ts",
