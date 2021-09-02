@@ -112,9 +112,10 @@ import { provideContainer } from "mini-ioc-vue";
 
 const rootOptions = {
 	provide: {
-		...provideContainer((container) => {
-			// do with the container whatever you need to initialize your dependencies
-		}),
+		// provideContainer will create a fresh container,
+		// if you need a custom container, pass your container to a provideContainer call
+		// like so provideContainer(container)
+		...provideContainer(),
 		// ...mapProvider() // if you don't need configuration
 	},
 };

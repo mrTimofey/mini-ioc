@@ -27,7 +27,7 @@ class SomeClass {
 }
 
 const renderer = createRenderer();
-const renderApp = async (compText: (comp: any) => string, configure?: (c: Container) => void) => {
+const renderApp = async (compText: (comp: any) => string, container?: Container) => {
 	const Component = Vue.extend({
 		inject: injectContainer(),
 		computed: {
@@ -39,7 +39,7 @@ const renderApp = async (compText: (comp: any) => string, configure?: (c: Contai
 		},
 	});
 	const App = Vue.extend({
-		provide: provideContainer(configure),
+		provide: provideContainer(container),
 		render: h => h('div', [Component, Component].map(c => h(c))),
 	});
 	const app = new App();
@@ -52,15 +52,18 @@ describe('Vue.js helpers', () => {
 	});
 
 	it('#mapProvider(configure) should create a configured container', async () => {
+		const container = new Container();
+		container.registerResolver(
+			IdGenerator,
+			() => new class extends IdGenerator {
+				public next() {
+					return super.next() * 100;
+				}
+			}()
+		);
 		expect(await renderApp(
 			comp => `${comp.someClass.instanceId}_${comp.someClassAsNew.instanceId}`,
-			container => {
-				container.registerResolver(IdGenerator, () => new class extends IdGenerator {
-					public next() {
-						return super.next() * 100;
-					}
-				}());
-			}
+			container
 		)).toContain('<div>100_200</div><div>100_300</div>');
 	});
 });
