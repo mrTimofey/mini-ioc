@@ -4,9 +4,26 @@ export type AnyClass<T = unknown> = RealClass<T> | AbstractClass<T>;
 // eslint-disable-next-line no-use-before-define
 export type Resolver<T = unknown> = (ctor: AnyClass<T>, container: Container) => T;
 
+interface IMetadataRetriever {
+	getMetadata<T>(key: string, ctor: AnyClass<T>): ConstructorParameters<AnyClass<T>>;
+}
+
+const yellingReflect: IMetadataRetriever = {
+	getMetadata() {
+		throw new Error('Auto resolving is not available without reflect-metadata');
+	},
+};
+
 export default class Container {
 	private instanceMap = new Map<AnyClass, unknown>();
 	private resolvers = new Map<AnyClass, Resolver>();
+	private reflect: IMetadataRetriever;
+
+	constructor(reflect?: IMetadataRetriever) {
+		if (reflect) this.reflect = reflect;
+		else if (typeof Reflect === 'object') this.reflect = Reflect;
+		else this.reflect = yellingReflect;
+	}
 
 	/**
 	 * Make new instance of the provided class.
@@ -15,7 +32,7 @@ export default class Container {
 	create<T>(ctor: AnyClass<T>): T {
 		if (this.resolvers.has(ctor))
 			return this.resolvers.get(ctor)!(ctor, this) as unknown as T;
-		const ctorArgs: ConstructorParameters<AnyClass<T>> | undefined = Reflect.getMetadata('design:paramtypes', ctor);
+		const ctorArgs: ConstructorParameters<AnyClass<T>> | undefined = this.reflect.getMetadata('design:paramtypes', ctor);
 		if (!ctorArgs?.length)
 			return new ctor();
 		const instance = new ctor(
