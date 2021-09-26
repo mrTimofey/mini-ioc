@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import { createApp, h } from 'vue';
-import { mapProvider } from 'mini-ioc/dist/vue';
+import { provideContainer } from 'mini-ioc-vue';
 import Root from './app';
 
 createApp({
-	provide: mapProvider(),
+	provide: provideContainer(),
 	render: () => h(Root),
 }).mount('#app');

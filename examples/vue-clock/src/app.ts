@@ -1,5 +1,5 @@
 import { defineComponent, inject } from 'vue';
-import { injectKey } from 'mini-ioc/dist/vue';
+import { injectKey } from 'mini-ioc-vue';
 import ClockStore from './store/clock';
 import ClockViewOptions from './components/clock-view-options';
 

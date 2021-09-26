@@ -1,11 +1,11 @@
-import { computedInjection, APP_IOC_CONTAINER_PROVIDE_KEY } from 'mini-ioc/dist/vue';
+import { computedResolver, injectContainer } from 'mini-ioc-vue';
 import { defineComponent } from 'vue';
 import ClockStore from '../store/clock';
 
 export default defineComponent({
-	inject: [APP_IOC_CONTAINER_PROVIDE_KEY],
+	inject: injectContainer(),
 	computed: {
-		clock: computedInjection(ClockStore).get,
+		clock: computedResolver(ClockStore),
 		timeString() {
 			return [
 				// typing works in VSCode, but this.clock is marked as error "property 'clock' doesn't exist"
