@@ -42,7 +42,6 @@ export default class Container {
 			new ctor();
 		--Container.createDepth;
 		if (Container.createDepth === 0) injectContext = null;
-
 		return instance;
 	}
 

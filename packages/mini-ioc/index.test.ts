@@ -86,7 +86,6 @@ describe('IOC container', () => {
 		expect(noMetadataInstance.arg2 === undefined);
 		expect(noMetadataInstance.arg3 === c.get(SomeClassWithConstructor));
 		expect(noMetadataInstance.arg4 === c.get(SomeClassWithInject));
-		expect(() => inject(SomeClass)).toThrowError();
 	});
 
 	it('inject: should not work outside a class constructor', () => {
