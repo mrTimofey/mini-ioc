@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import Container, { Resolvable } from '.';
+import Container, { Resolvable, inject } from '.';
 
 @Resolvable class SomeClass {}
 @Resolvable class SomeSubclass extends SomeClass {}
@@ -13,6 +13,21 @@ import Container, { Resolvable } from '.';
 
 class BindBaseClass {}
 @Resolvable class BindSubClass extends BindBaseClass {}
+
+class SomeClassWithInject {
+	bindBaseInstance: BindBaseClass;
+	constructor() {
+		this.bindBaseInstance = inject(BindBaseClass);
+	}
+}
+class NoMetadataClass {
+	constructor(
+		public arg1: unknown,
+		public arg2: unknown,
+		public arg3 = inject(SomeClassWithConstructor),
+		public arg4 = inject(SomeClassWithInject)
+	) {}
+}
 
 describe('IOC container', () => {
 	it('#get: resolves same instance for a single class', () => {
@@ -60,5 +75,23 @@ describe('IOC container', () => {
 		expect(instances[1].someOtherClass).toBeInstanceOf(SomeOtherClass);
 		expect(instances[0].someClass).toStrictEqual(instances[1].someClass);
 		expect(instances[0].someOtherClass).toStrictEqual(instances[1].someOtherClass);
+	});
+
+	it('inject: works without metadata within a class constructor', () => {
+		const c = new Container();
+		const noMetadataInstance = c.get(NoMetadataClass);
+		expect(noMetadataInstance === c.get(NoMetadataClass));
+		expect(noMetadataInstance !== c.create(NoMetadataClass));
+		expect(noMetadataInstance.arg1 === undefined);
+		expect(noMetadataInstance.arg2 === undefined);
+		expect(noMetadataInstance.arg3 === c.get(SomeClassWithConstructor));
+		expect(noMetadataInstance.arg4 === c.get(SomeClassWithInject));
+		expect(() => inject(SomeClass)).toThrowError();
+	});
+
+	it('inject: should not work outside a class constructor', () => {
+		const c = new Container();
+		c.get(NoMetadataClass);
+		expect(() => inject(NoMetadataClass)).toThrowError();
 	});
 });

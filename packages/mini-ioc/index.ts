@@ -8,21 +8,23 @@ interface IMetadataRetriever {
 	getMetadata<T>(key: string, ctor: AnyClass<T>): ConstructorParameters<AnyClass<T>>;
 }
 
-const yellingReflect: IMetadataRetriever = {
-	getMetadata() {
-		throw new Error('Auto resolving is not available without reflect-metadata');
-	},
-};
+// eslint-disable-next-line no-use-before-define
+let injectContext: Container | null = null;
+
+export function inject<T>(ctor: AnyClass<T>, createNew = false): T {
+	if (!injectContext) throw new Error('mini-ioc\'s `inject` function can only be used within a resolvable class constructor');
+	return createNew ? injectContext.create(ctor) : injectContext.get(ctor);
+}
 
 export default class Container {
 	private instanceMap = new Map<AnyClass, unknown>();
 	private resolvers = new Map<AnyClass, Resolver>();
-	private reflect: IMetadataRetriever;
+	private reflect?: IMetadataRetriever;
+	private static createDepth = 0;
 
 	constructor(reflect?: IMetadataRetriever) {
 		if (reflect) this.reflect = reflect;
 		else if (typeof Reflect === 'object') this.reflect = Reflect;
-		else this.reflect = yellingReflect;
 	}
 
 	/**
@@ -32,12 +34,15 @@ export default class Container {
 	create<T>(ctor: AnyClass<T>): T {
 		if (this.resolvers.has(ctor))
 			return this.resolvers.get(ctor)!(ctor, this) as unknown as T;
-		const ctorArgs: ConstructorParameters<AnyClass<T>> | undefined = this.reflect.getMetadata('design:paramtypes', ctor);
-		if (!ctorArgs?.length)
-			return new ctor();
-		const instance = new ctor(
-			...ctorArgs.map(ctorArg => this.get(ctorArg))
-		);
+		const ctorArgs: ConstructorParameters<AnyClass<T>> | undefined = this.reflect?.getMetadata('design:paramtypes', ctor);
+		++Container.createDepth;
+		injectContext = this;
+		const instance = Array.isArray(ctorArgs) ?
+			new ctor(...ctorArgs.map(ctorArg => this.get(ctorArg))) :
+			new ctor();
+		--Container.createDepth;
+		if (Container.createDepth === 0) injectContext = null;
+
 		return instance;
 	}
 
