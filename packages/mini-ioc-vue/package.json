@@ -1,6 +1,6 @@
 {
   "name": "mini-ioc-vue",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Vue.js mini-ioc binding internal package",
   "main": "index.js",
   "types": "index.d.ts",
@@ -13,8 +13,9 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
+    "@vue/composition-api": "^1.2.2",
     "mini-ioc": "*",
-    "vue": "^2.6.14"
+    "vue": "^3.2.19"
   },
   "files": [
     "index.js",

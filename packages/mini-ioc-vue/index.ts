@@ -1,10 +1,9 @@
 import Container, { AnyClass } from 'mini-ioc';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface IInjectionKey<T> extends Symbol {}
+import { InjectionKey } from 'vue';
+import { InjectionKey as Vue2InjectionKey } from '@vue/composition-api';
 
 const APP_IOC_CONTAINER_INJECT_KEY = '__VueAppDIContainer__';
-export const injectKey: IInjectionKey<Container> = Symbol(APP_IOC_CONTAINER_INJECT_KEY);
+export const injectKey: InjectionKey<Container> | Vue2InjectionKey<Container> = Symbol(APP_IOC_CONTAINER_INJECT_KEY);
 
 export function provideContainer(container = new Container()) {
 	return {
