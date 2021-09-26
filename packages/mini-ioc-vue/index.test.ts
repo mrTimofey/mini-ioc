@@ -1,11 +1,8 @@
 import 'reflect-metadata';
-import type { VueConstructor } from 'vue';
 import Container, { Resolvable } from 'mini-ioc';
 import { provideContainer, injectContainer, computedResolver } from '.';
-import { createRenderer } from 'vue-server-renderer';
-
-// @ts-ignore
-const Vue: VueConstructor = require('vue');
+import { defineComponent, createApp, h } from 'vue';
+import { renderToString } from 'vue/server-renderer';
 
 @Resolvable
 class IdGenerator {
@@ -26,24 +23,22 @@ class SomeClass {
 	}
 }
 
-const renderer = createRenderer();
 const renderApp = async (compText: (comp: any) => string, container?: Container) => {
-	const Component = Vue.extend({
+	const Component = defineComponent({
 		inject: injectContainer(),
 		computed: {
 			someClass: computedResolver(SomeClass),
 			someClassAsNew: computedResolver(SomeClass, true),
 		},
-		render(h) {
+		render() {
 			return h('div', compText(this));
 		},
 	});
-	const App = Vue.extend({
+	const app = createApp({
 		provide: provideContainer(container),
-		render: h => h('div', [Component, Component].map(c => h(c))),
+		render: () => h('div', [Component, Component].map(c => h(c))),
 	});
-	const app = new App();
-	return await renderer.renderToString(app);
+	return await renderToString(app);
 };
 
 describe('Vue.js helpers', () => {
