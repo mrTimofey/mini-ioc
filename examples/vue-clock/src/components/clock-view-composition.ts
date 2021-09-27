@@ -1,9 +1,8 @@
-import { injectContainer, injectKey } from 'mini-ioc-vue';
+import { injectKey } from 'mini-ioc-vue';
 import { computed, defineComponent, inject } from 'vue';
 import ClockStore from '../store/clock';
 
 export default defineComponent({
-	inject: injectContainer(),
 	setup() {
 		const clock = inject(injectKey)?.get(ClockStore);
 		const timeString = computed(() => clock && [

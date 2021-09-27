@@ -23,4 +23,9 @@ export default defineConfig({
 	// swc replaces esbuild, needed to support TS decorators with metadata
 	esbuild: false,
 	plugins: [vue(), swcVite()],
+	resolve: {
+		alias: {
+			vue: 'vue/dist/vue.esm-browser.js',
+		},
+	},
 });
