@@ -1,5 +1,10 @@
 {
-  "include": ["src"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ],
   "compilerOptions": {
     "alwaysStrict": true,
     "target": "esnext",
@@ -7,10 +12,17 @@
     "module": "esnext",
     "moduleResolution": "node",
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "sourceMap": true,
     "skipLibCheck": true,
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "baseUrl": ".",
-    "types": ["vite/client", "reflect-metadata"]
+    "types": [
+      "vite/client",
+      "reflect-metadata"
+    ]
   }
 }

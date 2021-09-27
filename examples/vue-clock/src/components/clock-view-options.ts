@@ -7,6 +7,7 @@ export default defineComponent({
 	computed: {
 		clock: computedResolver(ClockStore),
 		timeString() {
+			if (!this.clock) return '';
 			return [
 				// typing works in VSCode, but this.clock is marked as error "property 'clock' doesn't exist"
 				// @ts-ignore
@@ -18,5 +19,5 @@ export default defineComponent({
 			].map(v => v.toString().padStart(2, '0')).join(':');
 		},
 	},
-	template: '<div>{{ timeString }}</div>',
+	template: '<div>Vue options API component shows: {{ timeString }}</div>',
 });
