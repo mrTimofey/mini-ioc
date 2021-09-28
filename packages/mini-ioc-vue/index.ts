@@ -2,7 +2,7 @@ import Container, { AnyClass } from 'mini-ioc';
 import { InjectionKey } from 'vue';
 import { InjectionKey as Vue2InjectionKey } from '@vue/composition-api';
 
-const APP_IOC_CONTAINER_INJECT_KEY = '__VueAppDIContainer__';
+export const APP_IOC_CONTAINER_INJECT_KEY = '__VueAppDIContainer__';
 export const injectKey: InjectionKey<Container> | Vue2InjectionKey<Container> = Symbol(APP_IOC_CONTAINER_INJECT_KEY);
 
 export function provideContainer(container = new Container()) {
