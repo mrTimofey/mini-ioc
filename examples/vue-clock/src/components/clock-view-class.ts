@@ -3,9 +3,10 @@ import { Inject } from 'mini-ioc-vue-class';
 import ClockStore from '../store/clock';
 
 @Options({
+	name: 'ClockViewClass',
 	template: '<div>Vue class component shows: {{ timeString }}</div>',
 })
-class ClockView extends Vue {
+export default class ClockView extends Vue {
 	@Inject clock?: ClockStore;
 
 	get timeString() {
@@ -17,5 +18,3 @@ class ClockView extends Vue {
 		].map(v => v.toString().padStart(2, '0')).join(':');
 	}
 }
-
-export default ClockView;
