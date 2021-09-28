@@ -34,7 +34,7 @@ export default class Container {
 	create<T>(ctor: AnyClass<T>): T {
 		if (this.resolvers.has(ctor))
 			return this.resolvers.get(ctor)!(ctor, this) as unknown as T;
-		const ctorArgs: ConstructorParameters<AnyClass<T>> | undefined = this.reflect?.getMetadata('design:paramtypes', ctor);
+		const ctorArgs: ConstructorParameters<AnyClass<T>> | undefined = typeof this.reflect?.getMetadata === 'function' ? this.reflect.getMetadata('design:paramtypes', ctor) : undefined;
 		++Container.createDepth;
 		injectContext = this;
 		const instance = Array.isArray(ctorArgs) ?
