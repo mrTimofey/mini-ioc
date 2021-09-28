@@ -9,3 +9,7 @@ BREAKING: Moved to `mini-ioc@0.4.0`. Just update both `mini-ioc` to `0.4.0` and 
 ## 0.2.1
 
 FIX: `injectKey` type is not recognized.
+
+## 0.2.2
+
+Export `APP_IOC_CONTAINER_INJECT_KEY`, default injection key name for container.
