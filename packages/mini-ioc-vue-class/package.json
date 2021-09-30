@@ -1,6 +1,6 @@
 {
   "name": "mini-ioc-vue-class",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Vue.js class component mini-ioc decorators",
   "main": "index.js",
   "types": "index.d.ts",
