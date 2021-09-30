@@ -16,26 +16,39 @@ Integrates smoothly to Vue.js 2/3 projects with [vue-class-component](https://gi
 npm i mini-ioc
 ```
 
-If you want to resolve classes automatically:
+If you want to resolve classes automatically, you have 2 options.
 
--   Install `reflect-metadata` to be able to pass type information about constructor arguments and properties to runtime
--   Add `import 'reflect-metadata'` to the entry point of your application to make TypeScript provide decorated entities with reflection metadata
--   Configure TypeScript to support decorators and runtime type metadata with flags `compilerOptions.experimentalDecorators = true` and `compilerOptions.emitDecoratorMetadata = true` respectively in your `tsconfig.json`
+1. Use decorators with type metadata
+	-   Install `reflect-metadata` to be able to pass type information about constructor arguments and properties to runtime
+	-   Add `import 'reflect-metadata'` to the entry point of your application to make TypeScript provide decorated entities with reflection metadata
+	-   Configure TypeScript to support decorators and runtime type metadata with flags `compilerOptions.experimentalDecorators = true` and `compilerOptions.emitDecoratorMetadata = true` respectively in your `tsconfig.json`
+2. Use `inject` function. It is available within a class constructor and can be used to resolve dependencies without metadata provided by decorators.
 
 Then you can use an IOC container like this:
 
 ```typescript
-import Container, { Resolvable } from "mini-ioc";
+import Container, { Resolvable, inject } from "mini-ioc";
 
-// Any class you are going to resolve with container should decorated with Resolvable
+// Any class you are going to resolve with container should be decorated with Resolvable...
 @Resolvable
 class SomeClass {}
 
 @Resolvable
 class SomeOtherClass {
 	public constructor(
-		// Constructor arguments will be resolved by a container
+		// Constructor arguments will be resolved by a container automatically based on metadata
 		public someInstance: SomeClass
+	);
+}
+
+// ...or use `inject` instead
+class SomeClass {}
+
+@Resolvable
+class SomeOtherClass {
+	public constructor(
+		// Constructor arguments will be resolved by the inject function on constructor call
+		public someInstance = inject(SomeClass)
 	);
 }
 
@@ -77,7 +90,7 @@ You can completely override default behavior for a class instance creation.
 import Container from "mini-ioc";
 
 abstract class BaseClass {}
-// Mind that you don't need Resolvable decorator for custom resolvers.
+// Mind that you don't need Resolvable decorator nor `inject` for custom resolvers.
 // Helpful for third-party libraries.
 class SubClass extends BaseClass {
 	protected field!: string;
@@ -96,8 +109,6 @@ container.registerResolver(BaseClass, (classCtor, container) => classCtor.makeIn
 
 console.log(container.get(BaseClass) instanceof SubClass); // true
 ```
-
-And that's all.
 
 ## Vue.js support
 
@@ -175,6 +186,7 @@ import SomeClass from "./anywhere";
 defineComponent({
 	setup() {
 		const container = inject(injectKey);
+		if (!container) throw new Error("No container - no component, pal. Come back when have one.");
 		const someInstance = container.get(SomeClass);
 		const freshSomeInstance = container.create(SomeClass);
 	},
