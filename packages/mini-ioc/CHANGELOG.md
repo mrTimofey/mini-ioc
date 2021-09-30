@@ -13,3 +13,32 @@ Vue.js support moved to separate packages `mini-ioc-vue` and `mini-ioc-vue-class
 ## 0.4.1
 
 Container constructor now receives optional custom Reflect object.
+
+## 0.5.0
+
+`inject` function added. It can be used to inject dependencies within a class constructor without decorators support.
+
+```typescript
+import Dep1 from 'somewhere';
+import Dep2 from 'somewhere-else';
+import { Resolvable, inject } from 'mini-ioc';
+
+// with decorators
+
+@Resolvable
+class ClassWithDecorators {
+	constructor(
+		private dep1: Dep1,
+		private dep2: Dep2
+	) {}
+}
+
+// without decorators
+
+class ClassWithoutDecorators {
+	constructor(
+		private dep1 = inject(Dep1),
+		private dep2 = inject(Dep2)
+	) {}
+}
+```

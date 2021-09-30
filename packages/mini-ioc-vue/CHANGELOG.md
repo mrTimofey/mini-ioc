@@ -13,3 +13,25 @@ FIX: `injectKey` type is not recognized.
 ## 0.2.2
 
 Export `APP_IOC_CONTAINER_INJECT_KEY`, default injection key name for container.
+
+## 0.3.0
+
+BREAKING: `injectContainer` is replaced with `injectMixin`.
+
+Migration:
+
+```typescript
+// any Vue component
+import { injectContainer } from 'mini-ioc-vue';
+export default {
+	inject: {
+		...injectContainer()
+	}
+}
+
+// ...should be changed to...
+import { injectMixin } from 'mini-ioc-vue';
+export default {
+	mixins: [injectMixin]
+}
+```
