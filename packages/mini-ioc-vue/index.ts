@@ -1,21 +1,22 @@
 import Container, { AnyClass } from 'mini-ioc';
-import { InjectionKey } from 'vue';
-import { InjectionKey as Vue2InjectionKey } from '@vue/composition-api';
 
 export const APP_IOC_CONTAINER_INJECT_KEY = '__VueAppDIContainer__';
-export const injectKey: InjectionKey<Container> | Vue2InjectionKey<Container> = Symbol(APP_IOC_CONTAINER_INJECT_KEY);
+export const injectKey = Symbol(APP_IOC_CONTAINER_INJECT_KEY);
 
 export function provideContainer(container = new Container()) {
 	return {
-		[injectKey as symbol]: container,
+		[injectKey]: container,
 	};
 }
 
-export function injectContainer() {
-	return {
-		[APP_IOC_CONTAINER_INJECT_KEY]: injectKey as symbol,
-	};
-}
+export const injectMixin = {
+	inject: {
+		[APP_IOC_CONTAINER_INJECT_KEY]: {
+			from: injectKey,
+			default: null,
+		},
+	},
+} as const;
 
 export function computedResolver<T>(ctor: AnyClass<T>, newInstance: boolean = false): () => T {
 	return function(this: any) {

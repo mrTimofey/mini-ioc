@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import Container, { Resolvable } from 'mini-ioc';
-import { provideContainer, injectContainer, computedResolver } from '.';
+import { provideContainer, injectMixin, computedResolver } from '.';
 import { defineComponent, createApp, h } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 
@@ -25,7 +25,7 @@ class SomeClass {
 
 const renderApp = async (compText: (comp: any) => string, container?: Container) => {
 	const Component = defineComponent({
-		inject: injectContainer(),
+		mixins: [injectMixin],
 		computed: {
 			someClass: computedResolver(SomeClass),
 			someClassAsNew: computedResolver(SomeClass, true),

@@ -109,28 +109,26 @@ To make things work in Vue.js components you should register mini-ioc container 
 
 ```typescript
 import Container from "mini-ioc";
-import { provideContainer } from "mini-ioc-vue";
+import { injectKey } from "mini-ioc-vue";
 
 const container = new Container();
 
 // configure container bindings here
 
-const rootOptions = {
-	provide: {
-		...provideContainer(container),
-		// ...provideContainer() // with default empty container
-	},
-};
-
 // for Vue 2
 import Vue from "vue";
 
-const app = new Vue(rootOptions);
+const app = new Vue({
+	provide: {
+		[injectKey]: container,
+	},
+});
 
 // for Vue 3
 import { createApp } from "vue";
 
-const app = createApp(rootOptions);
+const app = createApp();
+app.provide(injectKey, container);
 ```
 
 ### Vue 3 options API (Vue 2 support is limited)
@@ -139,13 +137,11 @@ Resolving will work for both Vue 2 and 3, but **typing** will be available only 
 
 ```typescript
 import { defineComponent } from "vue";
-import { injectContainer, computedResolver } from "mini-ioc-vue";
+import { injectMixin, computedResolver } from "mini-ioc-vue";
 import SomeClass from "./anywhere";
 
 defineComponent({
-	inject: {
-		...injectContainer(),
-	},
+	mixins: [injectMixin],
 	computed: {
 		// resolve as a singleton (container.get)
 		someInstance: computedResolver(SomeClass),
@@ -155,7 +151,21 @@ defineComponent({
 });
 ```
 
-### Vue 3 composition API (Vue 2 + @vue/composition-api)
+### Vue 3 composition API (or Vue 2 + @vue/composition-api)
+
+First you should provide additional type information for `inject` somewhere in `.d.ts` file within your project (`src/mini-ioc.d.ts` for example).
+
+*Library itself could provide that too but in this case it will only support one of Vue 2 + `@vue/composition-api` or Vue 3. So some manual actions here are the compromise to support both. Sorry for the inconvenience :)*
+
+```typescript
+declare module 'mini-ioc-vue' {
+	import type Container from 'mini-ioc';
+	import type { InjectionKey } from 'vue'; // for Vue 3
+	// import type { InjectionKey } from '@vue/composition-api'; // for Vue 2
+
+	export const injectKey: InjectionKey<Container>;
+}
+```
 
 ```typescript
 import { defineComponent, inject } from "vue";
@@ -177,7 +187,7 @@ defineComponent({
 npm i mini-ioc mini-ioc-vue mini-ioc-vue-class
 ```
 
-Decorators are using `computedResolver` under-the-hood so the result is the same as using options API. But with decorators you get typing support for both Vue 2 and 3.
+Decorators are using `computedResolver` under-the-hood so the result is the same as using options API.
 
 ```typescript
 import { Inject, InjectNew } from "mini-ioc-vue-class";

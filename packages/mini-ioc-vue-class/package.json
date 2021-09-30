@@ -14,7 +14,8 @@
   },
   "devDependencies": {
     "mini-ioc": "*",
-    "mini-ioc-vue": "*"
+    "mini-ioc-vue": "*",
+    "vue-class-component": "^8.0.0-rc.1"
   },
   "files": [
     "index.js",

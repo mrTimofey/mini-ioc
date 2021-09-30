@@ -7,8 +7,14 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "baseUrl": ".",
-    "types": ["reflect-metadata", "jest"],
-    "lib": ["es2015", "dom"],
+    "types": [
+      "reflect-metadata",
+      "jest"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "declaration": true
   }
 }
