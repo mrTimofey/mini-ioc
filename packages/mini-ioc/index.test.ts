@@ -15,10 +15,9 @@ class BindBaseClass {}
 @Resolvable class BindSubClass extends BindBaseClass {}
 
 class SomeClassWithInject {
-	bindBaseInstance: BindBaseClass;
-	constructor() {
-		this.bindBaseInstance = inject(BindBaseClass);
-	}
+	constructor(
+		public bindBaseInstance = inject(BindBaseClass)
+	) {}
 }
 class NoMetadataClass {
 	constructor(
@@ -30,6 +29,24 @@ class NoMetadataClass {
 }
 
 describe('IOC container', () => {
+	it('#getResolvedArguments: resolves argument values for classes with metadata', () => {
+		const c = new Container();
+		const args = c.getResolvedArguments(SomeClassWithConstructor);
+		expect(args[0]).toBeInstanceOf(SomeClass);
+		expect(args[1]).toBeInstanceOf(SomeOtherClass);
+		const sameArgs = c.getResolvedArguments(SomeClassWithConstructor);
+		expect(args[0]).toStrictEqual(sameArgs[0]);
+		expect(args[1]).toStrictEqual(sameArgs[1]);
+	});
+
+	it('#getResolvedArguments: returns empty array for classes without metadata or without arguments', () => {
+		const c = new Container();
+		const noMetadataArgs = c.getResolvedArguments(NoMetadataClass);
+		expect(noMetadataArgs.length).toStrictEqual(0);
+		const emptyCtorArgs = c.getResolvedArguments(SomeClass);
+		expect(emptyCtorArgs.length).toStrictEqual(0);
+	});
+
 	it('#get: resolves same instance for a single class', () => {
 		const c = new Container();
 		expect(c.get(SomeClass)).toStrictEqual(c.get(SomeClass));

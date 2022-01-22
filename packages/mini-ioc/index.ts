@@ -28,18 +28,26 @@ export default class Container {
 	}
 
 	/**
+	 * Resolves constructor argument values.
+	 * @param ctor constructor
+	 */
+	getResolvedArguments<T>(ctor: AnyClass<T>): any[] {
+		const ctorArgs = typeof this.reflect?.getMetadata === 'function'
+			? this.reflect.getMetadata('design:paramtypes', ctor)
+			: undefined;
+		return Array.isArray(ctorArgs) ? ctorArgs.map(ctorArg => this.get(ctorArg)) : [];
+	}
+
+	/**
 	 * Make new instance of the provided class.
 	 * @param ctor class to make instance from
 	 */
 	create<T>(ctor: AnyClass<T>): T {
-		if (this.resolvers.has(ctor))
-			return this.resolvers.get(ctor)!(ctor, this) as unknown as T;
-		const ctorArgs: ConstructorParameters<AnyClass<T>> | undefined = typeof this.reflect?.getMetadata === 'function' ? this.reflect.getMetadata('design:paramtypes', ctor) : undefined;
 		++Container.createDepth;
 		injectContext = this;
-		const instance = Array.isArray(ctorArgs) ?
-			new ctor(...ctorArgs.map(ctorArg => this.get(ctorArg))) :
-			new ctor();
+		const instance = this.resolvers.has(ctor)
+			? this.resolvers.get(ctor)!(ctor, this) as unknown as T
+			: new ctor(...this.getResolvedArguments(ctor));
 		--Container.createDepth;
 		if (Container.createDepth === 0) injectContext = null;
 		return instance;
@@ -84,7 +92,11 @@ export default class Container {
  * Use this as a class decorator. It does 2 things:
  * - forces TypeScript compiler to define design:paramtypes metadata for the constructor
  * - marks class as injectable
- * @param ctor injectable entity class/constructor
+ * Requires tsconfig's compilerOptions.emitDecoratorMetadata set to true.
+ *
+ * If you can't or don't want to use metadata, consider using alternative approach
+ * using inject function to set default constructor argument values.
+ * See README.md for more details.
  */
 export const Resolvable: ClassDecorator = () => {
 	// nothing

@@ -42,3 +42,16 @@ class ClassWithoutDecorators {
 	) {}
 }
 ```
+
+## 1.0.0
+
+`getResolvedArguments` function added to the container. Now you can use default resolving behavior within a resolver function.
+
+```typescript
+container.registerResolver(SomeClass, (ctor, container) => {
+	// you can just call `new ctor()` if you don't use decorators, but what if you will some day?
+	const instance = new ctor(...container.getResolvedArguments(ctor));
+	instances.initSomethingImportant(42);
+	return instance;
+})
+```

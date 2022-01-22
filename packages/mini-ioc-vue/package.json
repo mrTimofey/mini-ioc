@@ -13,7 +13,6 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@vue/composition-api": "^1.2.2",
     "mini-ioc": "*",
     "vue": "^3.2.19"
   },

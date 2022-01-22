@@ -21,13 +21,13 @@ If you want to resolve classes automatically, you have 2 options.
 1. Use decorators with type metadata
 	-   Install `reflect-metadata` to be able to pass type information about constructor arguments and properties to runtime
 	-   Add `import 'reflect-metadata'` to the entry point of your application to make TypeScript provide decorated entities with reflection metadata
-	-   Configure TypeScript to support decorators and runtime type metadata with flags `compilerOptions.experimentalDecorators = true` and `compilerOptions.emitDecoratorMetadata = true` respectively in your `tsconfig.json`
+	-   Configure TypeScript to support decorators and runtime type metadata with flags `compilerOptions.experimentalDecorators = true` and `compilerOptions.emitDecoratorMetadata = true`  in your `tsconfig.json`
 2. Use `inject` function. It is available within a class constructor and can be used to resolve dependencies without metadata provided by decorators.
 
 Then you can use an IOC container like this:
 
 ```typescript
-import Container, { Resolvable, inject } from "mini-ioc";
+import { Resolvable } from "mini-ioc";
 
 // Any class you are going to resolve with container should be decorated with Resolvable...
 @Resolvable
@@ -42,6 +42,8 @@ class SomeOtherClass {
 }
 
 // ...or use `inject` instead
+import { inject } from "mini-ioc";
+
 class SomeClass {}
 
 @Resolvable
@@ -51,6 +53,8 @@ class SomeOtherClass {
 		public someInstance = inject(SomeClass)
 	);
 }
+
+import Container from "mini-ioc";
 
 // Container instance
 const container = new Container();
@@ -78,7 +82,7 @@ class SubClass extends BaseClass {}
 
 const container = new Container();
 
-// Bind abstract class implementation
+// Bind abstract class to its implementation
 container.bind(BaseClass, SubClass);
 
 console.log(container.get(BaseClass) instanceof SubClass); // true
@@ -90,8 +94,7 @@ You can completely override default behavior for a class instance creation.
 import Container from "mini-ioc";
 
 abstract class BaseClass {}
-// Mind that you don't need Resolvable decorator nor `inject` for custom resolvers.
-// Helpful for third-party libraries.
+
 class SubClass extends BaseClass {
 	protected field!: string;
 
@@ -105,7 +108,16 @@ class SubClass extends BaseClass {
 const container = new Container();
 
 // Register custom function as a resolver for BaseClass
-container.registerResolver(BaseClass, (classCtor, container) => classCtor.makeInstance());
+// Mind that you don't have to use Resolvable decorator nor `inject` for custom resolvers.
+// Helpful for third-party libraries.
+container.registerResolver(BaseClass, (classCtor, container) => SubClass.makeInstance());
+
+// Make instance using default resolving behavior and add some initialization logic.
+container.registerResolver(BaseClass, (classCtor, container) => {
+	const instance = new SubClass(...container.getResolvedArguments(SubClass));
+	instance.initSomethingImportant(42);
+	return instance;
+});
 
 console.log(container.get(BaseClass) instanceof SubClass); // true
 ```
