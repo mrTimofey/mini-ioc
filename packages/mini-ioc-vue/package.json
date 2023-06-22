@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "mini-ioc": "*",
-    "vue": "^3.2.19"
+    "vue": "^3.3.4"
   },
   "files": [
     "index.js",

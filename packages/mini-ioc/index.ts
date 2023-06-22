@@ -47,7 +47,7 @@ export default class Container {
 		injectContext = this;
 		const instance = this.resolvers.has(ctor)
 			? this.resolvers.get(ctor)!(ctor, this) as unknown as T
-			: new ctor(...this.getResolvedArguments(ctor));
+			: new (ctor as RealClass<T>)(...this.getResolvedArguments(ctor));
 		--Container.createDepth;
 		if (Container.createDepth === 0) injectContext = null;
 		return instance;
