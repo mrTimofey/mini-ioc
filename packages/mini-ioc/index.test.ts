@@ -97,12 +97,12 @@ describe('IOC container', () => {
 	it('inject: works without metadata within a class constructor', () => {
 		const c = new Container();
 		const noMetadataInstance = c.get(NoMetadataClass);
-		expect(noMetadataInstance === c.get(NoMetadataClass));
-		expect(noMetadataInstance !== c.create(NoMetadataClass));
-		expect(noMetadataInstance.arg1 === undefined);
-		expect(noMetadataInstance.arg2 === undefined);
-		expect(noMetadataInstance.arg3 === c.get(SomeClassWithConstructor));
-		expect(noMetadataInstance.arg4 === c.get(SomeClassWithInject));
+		expect(noMetadataInstance === c.get(NoMetadataClass)).toStrictEqual(true);
+		expect(noMetadataInstance !== c.create(NoMetadataClass)).toStrictEqual(true);
+		expect(noMetadataInstance.arg1 === undefined).toStrictEqual(true);
+		expect(noMetadataInstance.arg2 === undefined).toStrictEqual(true);
+		expect(noMetadataInstance.arg3 === c.get(SomeClassWithConstructor)).toStrictEqual(true);
+		expect(noMetadataInstance.arg4 === c.get(SomeClassWithInject)).toStrictEqual(true);
 	});
 
 	it('inject: should not work outside a class constructor', () => {
