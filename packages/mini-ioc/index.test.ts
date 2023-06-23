@@ -62,6 +62,7 @@ describe('IOC container', () => {
 		c.registerResolver(SomeClass, (Ctor, container) => {
 			expect(Ctor).toStrictEqual(SomeClass);
 			expect(container).toStrictEqual(c);
+			// needed to check TS error related to constructor type
 			new Ctor();
 			return new SomeSubclass();
 		});
