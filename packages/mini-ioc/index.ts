@@ -2,7 +2,7 @@ export type RealClass<T = unknown> = new(...args: any[]) => T;
 export type AbstractClass<T = unknown> = abstract new(...args: any[]) => T;
 export type AnyClass<T = unknown> = RealClass<T> | AbstractClass<T>;
 // eslint-disable-next-line no-use-before-define
-export type Resolver<T = unknown> = (ctor: AnyClass<T>, container: Container) => T;
+export type Resolver<T = unknown, X = AnyClass<T>> = (ctor: X, container: Container) => T;
 
 interface IMetadataRetriever {
 	getMetadata<T>(key: string, ctor: AnyClass<T>): ConstructorParameters<AnyClass<T>>;
@@ -72,7 +72,9 @@ export default class Container {
 	 * @param ctor constructor or class to make instance from
 	 * @param resolver factory returning resolved instance
 	 */
-	registerResolver<T, X extends T>(ctor: AnyClass<T>, resolver: Resolver<X>): this {
+	registerResolver<T, X extends T>(ctor: RealClass<T>, resolver: Resolver<X, typeof ctor>): this;
+	registerResolver<T, X extends T>(ctor: AbstractClass<T>, resolver: Resolver<X, typeof ctor>): this;
+	registerResolver(ctor: AnyClass, resolver: Resolver<unknown, RealClass>): this {
 		this.resolvers.set(ctor, resolver as Resolver);
 		return this;
 	}

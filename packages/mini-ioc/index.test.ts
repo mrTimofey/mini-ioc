@@ -62,6 +62,7 @@ describe('IOC container', () => {
 		c.registerResolver(SomeClass, (Ctor, container) => {
 			expect(Ctor).toStrictEqual(SomeClass);
 			expect(container).toStrictEqual(c);
+			const instance = new Ctor();
 			return new SomeSubclass();
 		});
 		c.get(SomeClass);
