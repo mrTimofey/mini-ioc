@@ -1,4 +1,4 @@
-/* eslint-disable quote-props */
+/* eslint-disable @typescript-eslint/naming-convention,quote-props */
 module.exports = {
 	parser: '@typescript-eslint/parser',
 	parserOptions: {
@@ -124,7 +124,6 @@ module.exports = {
 		'arrow-spacing': 1,
 		'no-class-assign': 2,
 		'no-const-assign': 2,
-		'no-dupe-class-members': 2,
 		'no-duplicate-imports': 2,
 		'no-new-symbol': 2,
 		'no-useless-computed-key': 2,
@@ -156,6 +155,7 @@ module.exports = {
 		'@typescript-eslint/no-use-before-define': 2,
 		'@typescript-eslint/no-useless-constructor': 2,
 		'@typescript-eslint/no-redeclare': 2,
+		'@typescript-eslint/no-dupe-class-members': 2,
 	},
 	overrides: [
 		{
