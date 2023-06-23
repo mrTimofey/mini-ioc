@@ -45,13 +45,29 @@ class ClassWithoutDecorators {
 
 ## 1.0.0
 
-`getResolvedArguments` function added to the container. Now you can use default resolving behavior within a resolver function.
+`getResolvedArguments` method added to the container. Now you can use default resolving behavior within a resolver function.
 
 ```typescript
-container.registerResolver(SomeClass, (ctor, container) => {
-	// you can just call `new ctor()` if you don't use decorators, but what if you will some day?
-	const instance = new ctor(...container.getResolvedArguments(ctor));
+container.registerResolver(SomeClass, (Ctor, container) => {
+	// you can just call `new Ctor()` if you don't use decorators, but what if you will some day?
+	const instance = new Ctor(...container.getResolvedArguments(ctor));
 	instances.initSomethingImportant(42);
 	return instance;
-})
+});
+```
+
+## 1.0.1
+
+`registerResolver` TypeScript 5 type error fixed when using `new` resolver's first argument. Also the method became more strict with abstract classes.
+
+```typescript
+container.registerResolver(SomeClass, (Ctor, container) => {
+	// this doesn't pass a type-check for 1.0.0, but fixed in 1.0.1
+	return new Ctor(...container.getResolvedArguments(ctor));
+});
+
+container.registerResolver(AbstractSomeClass, (Ctor, container) => {
+	// this still fails a type-check if first argument is an abstract class
+	return new Ctor(...container.getResolvedArguments(ctor));
+});
 ```
