@@ -1,5 +1,5 @@
-export type RealClass<T = unknown> = new(...args: any[]) => T;
-export type AbstractClass<T = unknown> = abstract new(...args: any[]) => T;
+export type RealClass<T = unknown> = new (...args: any[]) => T;
+export type AbstractClass<T = unknown> = abstract new (...args: any[]) => T;
 export type AnyClass<T = unknown> = RealClass<T> | AbstractClass<T>;
 // eslint-disable-next-line no-use-before-define
 export type Resolver<T = unknown, X = AnyClass<T>> = (ctor: X, container: Container) => T;
